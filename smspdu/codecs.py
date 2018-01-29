@@ -1,4 +1,5 @@
 # coding: utf-8
+# Copyright (c) Qotto, 2018
 
 from binascii import hexlify
 from binascii import unhexlify

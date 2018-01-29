@@ -1,5 +1,5 @@
 # coding: utf-8
-# Copyright (c) Qotto, 2017
+# Copyright (c) Qotto, 2018
 
 import unittest
 

@@ -9,7 +9,7 @@ if __name__ == '__main__':
         url='https://github.com/qotto/smspdu',
         license='MIT',
         author='Alexandre Syenchuk',
-        author_email='contact@qotto.net',
+        author_email='sacha@qotto.net',
         description='Qotto/smspdu',
         packages=['smspdu'],
         include_package_data=True,
