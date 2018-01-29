@@ -41,7 +41,7 @@ class GSM:
         >>> GSM.decode('32D0A60C8287E5A0F63B3D07')
         '2 € par mois'
         """
-        reversed_bits = BitStream(hex=f'{cls.reversed_octets(data)}').bin
+        reversed_bits = BitStream(hex=cls.reversed_octets(data)).bin
         septets = [int(reversed_bits[k:k+7], 2) for k in range(len(reversed_bits)-7, -1, -7)]
         res = ''
         is_extended = False
@@ -87,7 +87,7 @@ class GSM:
                 raise ValueError(f"Char \"{char}\" can not be encoded with the GSM 7-bit codec")
             chars.append(char_index)
         res = '0' * (len(chars) % 8) + ''.join([f'{char:07b}' for char in chars][::-1])
-        return cls.reversed_octets(BitStream(bin=f'{res}').hex.upper())
+        return cls.reversed_octets(BitStream(bin=res).hex.upper())
 
     @classmethod
     def reversed_octets(cls, data: str) -> str:
@@ -129,5 +129,3 @@ class UCS2:
         'Lorem Ipsum'
         """
         return unhexlify(data).decode('utf-16be')
-
-class EightBits
