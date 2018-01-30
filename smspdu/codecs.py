@@ -1,9 +1,14 @@
 # coding: utf-8
 # Copyright (c) Qotto, 2018
 
+"""
+Implementation of different codecs used in SMS PDUs, according to the GSM 03.38 specification.
+"""
+
 from binascii import hexlify
 from binascii import unhexlify
 from bitstring import BitStream
+
 
 class GSM:
     """
@@ -61,12 +66,12 @@ class GSM:
     def encode(cls, data: str) -> str:
         """
         Returns an encoded PDU string.
-        
+
         Example:
 
         >>> GSM.encode("hellohello")
         'E8329BFD4697D9EC37'
-        
+
         You can also use characters from the extended table:
 
         >>> GSM.encode("2 € par mois")
@@ -99,6 +104,7 @@ class GSM:
         'F3F2F100'
         """
         return ''.join([data[k:k+2] for k in range(0, len(data), 2)][::-1])
+
 
 class UCS2:
     """
