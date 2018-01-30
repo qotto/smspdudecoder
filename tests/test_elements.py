@@ -23,14 +23,14 @@ class TypeOfAddressTestCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             TypeOfAddress.decode(f'{0x80|0b10:02x}')
 
-    def test_decode_invalid_npi(self):
+    def test_encode_invalid_npi(self):
         with self.assertRaises(ValueError):
             TypeOfAddress.encode({'npi': 'strange', 'ton': 'international'})
 
-    def test_decode_invalid_ton(self):
+    def test_encode_invalid_ton(self):
         with self.assertRaises(ValueError):
             TypeOfAddress.encode({'npi': 'isdn', 'ton': 'strange'})
 
-    def test_decode_invalid_dict(self):
+    def test_encode_invalid_dict(self):
         with self.assertRaises(ValueError):
             TypeOfAddress.encode({})

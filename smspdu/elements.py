@@ -2,7 +2,7 @@
 # Copyright (c) Qotto, 2018
 
 """
-Various elements consutrcting the SMS PDU.
+Various elements used in TP-DU, according to GSM 03.40.
 
 All these elements are encoded in strings and decoded in native Python objects.
 """
