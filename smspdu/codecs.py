@@ -9,6 +9,7 @@ from binascii import hexlify
 from binascii import unhexlify
 from bitstring import BitStream
 
+__all__ = ['GSM', 'UCS2']
 
 class GSM:
     """
