@@ -215,7 +215,7 @@ class UserData:
         }
 
 
-class SmsDeliver:
+class SMSDeliver:
     """
     SMS-DELIVER TP-DU.
     """
