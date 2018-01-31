@@ -58,7 +58,7 @@ class GSM:
                 continue
             if is_extended:
                 is_extended = False
-                res += cls.ALPHABET_EXT.get(char_index, '')
+                res += cls.ALPHABET_EXT.get(char_index, ' ')
             else:
                 res += cls.ALPHABET[char_index]
         return res

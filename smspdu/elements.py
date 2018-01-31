@@ -15,7 +15,7 @@ from datetime import timedelta
 from datetime import timezone
 from io import StringIO
 
-from typing import Dict
+from typing import Any, Dict
 
 __all__ = ['Date', 'Number', 'TypeOfAddress']
 
