@@ -4,8 +4,8 @@ from setuptools import setup
 
 if __name__ == '__main__':
     setup(
-        name='SMS PDU Decoder',
-        version='0',
+        name='smspdudecoder',
+        version='1.0.0',
         url='https://github.com/qotto/smspdu',
         license='MIT',
         author='Alexandre Syenchuk',
