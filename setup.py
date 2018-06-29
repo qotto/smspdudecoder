@@ -16,6 +16,7 @@ if __name__ == '__main__':
         zip_safe=False,
         install_requires=[
             'bitstring >= 3.1',
+            'pytz',
         ],
         classifiers=[
             'Intended Audience :: Developers',
