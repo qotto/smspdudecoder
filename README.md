@@ -6,7 +6,9 @@ Requires Python 3.6
 
 ## How to install
 
+```
 pip install smspdudecoder
+```
 
 ## How to est
 
