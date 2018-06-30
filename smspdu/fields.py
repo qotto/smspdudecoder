@@ -4,7 +4,7 @@
 """
 TP-DU fields according to GSM 03.40.
 
-Unline elements, fields represent independent datagram chunks, and are decoded from a file-like object.xs
+Unlike elements, fields represent independent datagram chunks, and are decoded from a file-like object.xs
 
 Fields may contain one or multiple elements.
 """
