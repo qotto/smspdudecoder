@@ -117,7 +117,7 @@ class UCS2:
     @classmethod
     def encode(cls, data: str) -> str:
         """
-        Returns decoded message from PDU string.
+        Returns an encoded PDU string.
 
         Example:
 
@@ -129,7 +129,7 @@ class UCS2:
     @classmethod
     def decode(cls, data: str) -> str:
         """
-        Returns an encoded PDU string.
+        Returns decoded message from PDU string.
 
         Example:
 
