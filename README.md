@@ -2,7 +2,7 @@
 
 This library will help you decode raw SMS data you can get from a GSM modem.
 
-Requires Python3.6
+Requires Python 3.6
 
 ## How to install
 
