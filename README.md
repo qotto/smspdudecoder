@@ -10,6 +10,6 @@ Requires Python 3.6
 pip install smspdudecoder
 ```
 
-## How to est
+## How to test
 
 If you want to experiment with it, clone the repository, do some changes, and type `tox` (tox needs to be installed) to launch tests.
