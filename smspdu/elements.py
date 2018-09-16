@@ -65,8 +65,10 @@ class Date:
         minute = int(io_data.read(2))
         second = int(io_data.read(2))
         tz_data = int(io_data.read(2), 16)
-        tz_multiplier = -1 if tz_data & 0x80 else +1
-        tz_delta = timedelta(minutes=15*tz_multiplier*int(tz_data&0x7f))
+        if tz_data & 0x80:
+            tz_delta = timedelta(minutes=-15 * int(f'{tz_data & 0x7f:x}'))
+        else:
+            tz_delta = timedelta(minutes=15 * tz_data)
         local_date = datetime(year, month, day, hour, minute, second, tzinfo=timezone(tz_delta))
         return local_date.astimezone(timezone.utc)
 
