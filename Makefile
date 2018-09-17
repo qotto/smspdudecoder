@@ -17,11 +17,7 @@ wheel:
 
 dist: sdist wheel
 
-sign_wheel:
-	wheel sign dist/${NAME_NORMALIZED}-${VERSION}-*.whl
-
 sign:
-	wheel verify dist/${NAME_NORMALIZED}-${VERSION}-*.whl
 	sh -c 'read -s -p "Enter GPG passphrase: " pwd && \
 	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/${NAME}-${VERSION}.tar.gz && \
 	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/${NAME_NORMALIZED}-${VERSION}-*.whl'
