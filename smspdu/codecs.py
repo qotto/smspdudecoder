@@ -61,6 +61,9 @@ class GSM:
                 res += cls.ALPHABET_EXT.get(char_index, ' ')
             else:
                 res += cls.ALPHABET[char_index]
+        if len(res) % 8 == 0:
+            if res.endswith("\r"):
+                res = res[:-1]
         return res
 
     @classmethod
@@ -78,6 +81,8 @@ class GSM:
         >>> GSM.encode("2 € par mois")
         '32D0A60C8287E5A0F63B3D07'
         """
+        if (len(data) + 1) % 8 == 0:
+            data = data + "\r"
         chars = list()
         for char in data:
             try:
