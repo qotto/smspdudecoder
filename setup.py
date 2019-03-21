@@ -5,7 +5,7 @@ from setuptools import setup
 if __name__ == '__main__':
     setup(
         name='smspdudecoder',
-        version='1.0.1',
+        version='1.1.0',
         url='https://github.com/qotto/smspdu',
         license='MIT',
         author='Alexandre Syenchuk',
