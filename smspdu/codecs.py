@@ -1,5 +1,6 @@
 # coding: utf-8
-# Copyright (c) Qotto, 2018
+# Copyright (c) Qotto, 2018-2019
+# Open-source software, see LICENSE file for details
 
 """
 Implementation of different codecs used in SMS PDUs, according to the GSM 03.38 specification.
@@ -10,6 +11,7 @@ from binascii import unhexlify
 from bitstring import BitStream
 
 __all__ = ['GSM', 'UCS2']
+
 
 class GSM:
     """

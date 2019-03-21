@@ -1,3 +1,7 @@
+# coding: utf-8
+# Copyright (c) Qotto, 2018-2019
+# Open-source software, see LICENSE file for details
+
 import doctest
 import unittest
 
