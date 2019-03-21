@@ -47,13 +47,18 @@ class Date:
 
         Examples:
 
-        >>> Date.decode('11101131521400')
-        datetime.datetime(2011, 1, 11, 13, 25, 41, tzinfo=datetime.timezone.utc)
+        >>> Date.decode('70402132522400')
+        datetime.datetime(2007, 4, 12, 23, 25, 42, tzinfo=datetime.timezone.utc)
 
         The same date, with a different offset, results in a different UTC date:
 
-        >>> Date.decode('111011315214C0')
-        datetime.datetime(2011, 1, 11, 10, 25, 41, tzinfo=datetime.timezone.utc)
+        >>> Date.decode('70402132522423')
+        datetime.datetime(2007, 4, 12, 15, 25, 42, tzinfo=datetime.timezone.utc)
+
+        And negative offsets are supported too:
+
+        >>> Date.decode('3130523210658A')
+        datetime.datetime(2013, 3, 26, 6, 1, 56, tzinfo=datetime.timezone.utc)
 
         >>> (Date.decode('11101131522400') - Date.decode('11101131521440')).total_seconds()
         3601.0
@@ -67,7 +72,8 @@ class Date:
         second = int(io_data.read(2))
         tz_data = int(io_data.read(2), 16)
         tz_multiplier = -1 if tz_data & 0x80 else +1
-        tz_delta = timedelta(minutes=15*tz_multiplier*int(tz_data&0x7f))
+        tz_offset_abs = int(f'{tz_data&0x7f:x}')
+        tz_delta = timedelta(minutes=15*tz_multiplier*tz_offset_abs)
         local_date = datetime(year, month, day, hour, minute, second, tzinfo=timezone(tz_delta))
         return local_date.astimezone(timezone.utc)
 
@@ -83,6 +89,9 @@ class Date:
 
         >>> Date.encode(pytz.timezone('Europe/Paris').localize(datetime(2020, 1, 29, 13, 25, 41)))
         '02109231521440'
+
+        >>> Date.encode(pytz.timezone('US/Pacific').localize(datetime(2013, 3, 25, 23, 1, 56)))
+        '3130523210658a'
         """
         result = date.strftime('%y%m%d%H%M%S')
         tz_delta = date.utcoffset()
@@ -90,7 +99,7 @@ class Date:
             tz_delta_seconds = 0.0
         else:
             tz_delta_seconds = tz_delta.total_seconds()
-        tz_delta_gsm = int(abs(tz_delta_seconds) / 60 / 15)
+        tz_delta_gsm = int(str(int(abs(tz_delta_seconds) / 60 / 15)), 16)
         if tz_delta_seconds < 0:
             tz_delta_gsm |= 0x80
         result += f'{tz_delta_gsm:02x}'
