@@ -37,15 +37,15 @@ class GSMEncodingTestCase(unittest.TestCase):
     def test_8n_1_encode(self):
         N1_ENCODED = '31D98C56B3DD1A'
         N1_DECODED = '1234567'
-        self.assertEqual(GSM.encode(N1_DECODED), N1_ENCODED)
+        self.assertEqual(GSM.encode(N1_DECODED, True), N1_ENCODED)
 
         N2_ENCODED = 'B0986C46ABD96EB85C503824161B'
         N2_DECODED = '0123456789ABCDE'
-        self.assertEqual(GSM.encode(N2_DECODED), N2_ENCODED)
+        self.assertEqual(GSM.encode(N2_DECODED, True), N2_ENCODED)
 
     def test_8n_1_decode(self):
         N1 = '1234567'
-        self.assertEqual(GSM.decode(GSM.encode(N1)), N1)
+        self.assertEqual(GSM.decode(GSM.encode(N1, True), True), N1)
 
         N2 = '0123456789ABCDE'
-        self.assertEqual(GSM.decode(GSM.encode(N2)), N2)
+        self.assertEqual(GSM.decode(GSM.encode(N2, True), True), N2)
