@@ -37,7 +37,7 @@ class GSM:
     CHAR_EXT = 0x1B
 
     @classmethod
-    def decode(cls, data: str) -> str:
+    def decode(cls, data: str, with_padding: bool = False) -> str:
         """
         Returns decoded message from PDU string.
 
@@ -45,8 +45,17 @@ class GSM:
 
         >>> GSM.decode('C8F71D14969741F977FD07')
         'How are you?'
+
         >>> GSM.decode('32D0A60C8287E5A0F63B3D07')
         '2 € par mois'
+
+        Decode without end padding
+        >>> GSM.decode('AA58ACA6AA8D1A')
+        '*115*5#\\r'
+
+        Decode with padding, remove the last <cr>
+        >>> GSM.decode('AA58ACA6AA8D1A', True)
+        '*115*5#'
         """
         reversed_bits = BitStream(hex=cls.reversed_octets(data)).bin
         septets = [int(reversed_bits[k:k+7], 2) for k in range(len(reversed_bits)-7, -1, -7)]
@@ -61,13 +70,14 @@ class GSM:
                 res += cls.ALPHABET_EXT.get(char_index, ' ')
             else:
                 res += cls.ALPHABET[char_index]
-        if len(res) % 8 == 0:
-            if res.endswith("\r"):
-                res = res[:-1]
-        return res
+
+        if with_padding and len(res) % 8 == 0 and res.endswith('\r'):
+            return res[:-1]
+        else:
+            return res
 
     @classmethod
-    def encode(cls, data: str) -> str:
+    def encode(cls, data: str, with_padding: bool = False) -> str:
         """
         Returns an encoded PDU string.
 
@@ -80,9 +90,15 @@ class GSM:
 
         >>> GSM.encode("2 € par mois")
         '32D0A60C8287E5A0F63B3D07'
+
+        Encode without end padding
+        >>> GSM.encode('*115*5#')
+        'AA58ACA6AA8D00'
+
+        Encode with padding, add an <cr> at the end
+        >>> GSM.encode('*115*5#', True)
+        'AA58ACA6AA8D1A'
         """
-        if (len(data) + 1) % 8 == 0:
-            data = data + "\r"
         chars = list()
         for char in data:
             try:
@@ -98,6 +114,10 @@ class GSM:
             if char_index == cls.CHAR_EXT:
                 raise ValueError(f"Char \"{char}\" can not be encoded with the GSM 7-bit codec")
             chars.append(char_index)
+
+        if with_padding and (len(chars) + 1) % 8 == 0:
+            chars.append(cls.ALPHABET.index('\r'))
+
         res = '0' * (len(chars) % 8) + ''.join([f'{char:07b}' for char in chars][::-1])
         return cls.reversed_octets(BitStream(bin=res).hex.upper())
 
