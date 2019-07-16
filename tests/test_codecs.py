@@ -36,39 +36,39 @@ class GSMEncodingTestCase(unittest.TestCase):
         self.assertEqual(GSM.decode(DATA_ENCODED), DATA_DECODED)
 
     def test_ext_alphabet(self):
-        N1_ENCODED = '31D98C56B36DCA0D'
-        N1_DECODED = '123456€\r'
-        self.assertEqual(GSM.encode(N1_DECODED, True), N1_ENCODED)
+        self.assertEqual(GSM.encode('123456€\r', with_padding=True), '31D98C56B36DCA0D')
 
-        N2_ENCODED = '31D98C56B3DD700D'
-        N2_DECODED = '12345678\r'
-        self.assertEqual(GSM.encode(N2_DECODED, True), N2_ENCODED)
+        self.assertEqual(GSM.encode('12345678\r',  with_padding=True), '31D98C56B3DD700D')
 
     def test_double_cr(self):
-        N1_ENCODED = 'B158ACB629371A'
-        N1_DECODED = '1115€\r'
-        self.assertEqual(GSM.encode(N1_DECODED, True), N1_ENCODED)
-        self.assertEqual("{0:b}".format(int(N1_ENCODED, 16)),
-                         '10110001010110001010110010110110001010010011011100011010')
+        self.assertEqual(GSM.decode(GSM.encode('1234567\r', with_padding=True), strip_padding=True), '1234567\r\r')
+        self.assertEqual(GSM.decode(GSM.encode('1234567\r', with_padding=True), strip_padding=False), '1234567\r\r')
 
-        N2_ENCODED = 'AA58ACA6AA351A'
-        N2_DECODED = '*115*5\r'
-        self.assertEqual(GSM.encode(N2_DECODED, True), N2_ENCODED)
-        self.assertEqual("{0:b}".format(int(N2_ENCODED, 16)),
-                         '10101010010110001010110010100110101010100011010100011010')
+        self.assertEqual(GSM.decode(GSM.encode('1234567\r', with_padding=False), strip_padding=True), '1234567')
+        self.assertEqual(GSM.decode(GSM.encode('1234567\r', with_padding=False), strip_padding=False), '1234567\r')
+
+        self.assertEqual(GSM.decode(GSM.encode('123456\r', with_padding=True), strip_padding=True), '123456\r')
+        self.assertEqual(GSM.decode(GSM.encode('123456\r', with_padding=True), strip_padding=False), '123456\r\r')
+
+        self.assertEqual(GSM.decode(GSM.encode('12345\r', with_padding=True), strip_padding=True), '12345\r')
+        self.assertEqual(GSM.decode(GSM.encode('12345\r', with_padding=True), strip_padding=False), '12345\r')
+
+        self.assertEqual(GSM.decode(GSM.encode('123456\r\r', with_padding=True), strip_padding=True), '123456\r\r\r')
+        self.assertEqual(GSM.decode(GSM.encode('123456\r\r', with_padding=True), strip_padding=False), '123456\r\r\r')
 
     def test_8n_1_encode(self):
-        N1_ENCODED = '31D98C56B3DD1A'
-        N1_DECODED = '1234567'
-        self.assertEqual(GSM.encode(N1_DECODED, True), N1_ENCODED)
+        self.assertEqual(GSM.encode('1234567', True), '31D98C56B3DD1A')
 
-        N2_ENCODED = 'B0986C46ABD96EB85C503824161B'
-        N2_DECODED = '0123456789ABCDE'
-        self.assertEqual(GSM.encode(N2_DECODED, True), N2_ENCODED)
+        self.assertEqual(GSM.encode('0123456789ABCDE', True), 'B0986C46ABD96EB85C503824161B')
+
+        self.assertEqual(GSM.decode(GSM.encode('1234567', with_padding=True), strip_padding=True), '1234567')
+        self.assertEqual(GSM.decode(GSM.encode('12345^', with_padding=True), strip_padding=True), '12345^')
+        self.assertEqual(GSM.decode(GSM.encode('12345^', with_padding=True), strip_padding=False), '12345^\r')
+        self.assertEqual(GSM.decode(GSM.encode('123456^', with_padding=True), strip_padding=True), '123456^')
+        self.assertEqual(GSM.decode(GSM.encode('123456^', with_padding=True), strip_padding=False), '123456^')
 
     def test_8n_1_decode(self):
-        N1 = '1234567'
-        self.assertEqual(GSM.decode(GSM.encode(N1, True), True), N1)
+        self.assertEqual(GSM.decode(GSM.encode('1234567', with_padding=True), strip_padding=True), '1234567')
 
-        N2 = '0123456789ABCDE'
-        self.assertEqual(GSM.decode(GSM.encode(N2, True), True), N2)
+        self.assertEqual(GSM.decode(GSM.encode('0123456789ABCDE', with_padding=True),
+                                    strip_padding=True), '0123456789ABCDE')
