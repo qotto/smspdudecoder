@@ -38,9 +38,16 @@ class GSM:
     CHAR_EXT = 0x1B
 
     @classmethod
-    def decode(cls, data: str, with_padding: bool = False) -> str:
+    def decode(cls, data: str, strip_padding: bool = False) -> str:
         r"""
         Returns decoded message from PDU string.
+
+        If with_padding argument is true and the total number of characters to be sent equals to (8n-1) where n=1,2,3,
+        etc, then there are 7 spare bits at the end of the message and the last padding character is <CR>, the decode
+        function removes this last <CR>.
+
+        For more details, read the ETSI GSM 03.38 specification (version 5.6.1) that can be found at:
+        https://www.etsi.org/deliver/etsi_i_ets/300900_300999/300900/03_60/ets_300900e03p.pdf
 
         Some examples:
 
@@ -54,7 +61,7 @@ class GSM:
         >>> GSM.decode('AA58ACA6AA8D1A')
         '*115*5#\r'
 
-        Decodes with padding, remove the last <CR>
+        Decodes with padding, removes the last <CR>
         >>> GSM.decode('AA58ACA6AA8D1A', True)
         '*115*5#'
         """
@@ -72,7 +79,7 @@ class GSM:
             else:
                 res += cls.ALPHABET[char_index]
 
-        if with_padding and len(res) % 8 == 0 and res.endswith('\r'):
+        if strip_padding and len(septets) % 8 == 0 and res.endswith('\r'):
             return res[:-1]
         else:
             return res
@@ -81,6 +88,16 @@ class GSM:
     def encode(cls, data: str, with_padding: bool = False) -> str:
         """
         Returns an encoded PDU string.
+
+        If with_padding argument is true and the total number of characters to be sent equals to (8n-1) where n=1,2,3,
+        etc, then there are 7 spare bits at the end of the message. To avoid the situation where the receiving entity
+        confuses 7 binary zero pad bits as the @ character, a <CR> character shall be used for padding in this
+        situation.
+        If <CR> is intended to be the last character and the message (including the wanted <CR>) ends on an
+        octet boundary, then another <CR> must be added together with a padding bit 0.
+
+        For more details, read the ETSI GSM 03.38 specification (version 5.6.1) that can be found at:
+        https://www.etsi.org/deliver/etsi_i_ets/300900_300999/300900/03_60/ets_300900e03p.pdf
 
         Example:
 
@@ -96,7 +113,7 @@ class GSM:
         >>> GSM.encode('*115*5#')
         'AA58ACA6AA8D00'
 
-        Encodes with padding, add an <CR> at the end
+        Encodes with padding, adds a <CR> at the end
         >>> GSM.encode('*115*5#', True)
         'AA58ACA6AA8D1A'
         """
@@ -116,8 +133,11 @@ class GSM:
                 raise ValueError(f"Char \"{char}\" can not be encoded with the GSM 7-bit codec")
             chars.append(char_index)
 
-        if with_padding and (len(chars) + 1) % 8 == 0:
-            chars.append(cls.ALPHABET.index('\r'))
+        if with_padding:
+            if len(chars) % 8 == 0 and data[-1] == '\r':
+                chars.append(cls.ALPHABET.index('\r'))
+            if len(chars) % 8 == 7:
+                chars.append(cls.ALPHABET.index('\r'))
 
         res = '0' * (len(chars) % 8) + ''.join([f'{char:07b}' for char in chars][::-1])
         return cls.reversed_octets(BitStream(bin=res).hex.upper())
