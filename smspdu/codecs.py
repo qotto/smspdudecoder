@@ -11,6 +11,7 @@ from bitstring import BitStream
 
 __all__ = ['GSM', 'UCS2']
 
+
 class GSM:
     """
     GSM 7-bit SMS codec
@@ -38,7 +39,7 @@ class GSM:
 
     @classmethod
     def decode(cls, data: str, with_padding: bool = False) -> str:
-        """
+        r"""
         Returns decoded message from PDU string.
 
         Some examples:
@@ -49,11 +50,11 @@ class GSM:
         >>> GSM.decode('32D0A60C8287E5A0F63B3D07')
         '2 € par mois'
 
-        Decode without end padding
+        Decodes without padding
         >>> GSM.decode('AA58ACA6AA8D1A')
-        '*115*5#\\r'
+        '*115*5#\r'
 
-        Decode with padding, remove the last <cr>
+        Decodes with padding, remove the last <CR>
         >>> GSM.decode('AA58ACA6AA8D1A', True)
         '*115*5#'
         """
@@ -91,11 +92,11 @@ class GSM:
         >>> GSM.encode("2 € par mois")
         '32D0A60C8287E5A0F63B3D07'
 
-        Encode without end padding
+        Encodes without padding
         >>> GSM.encode('*115*5#')
         'AA58ACA6AA8D00'
 
-        Encode with padding, add an <cr> at the end
+        Encodes with padding, add an <CR> at the end
         >>> GSM.encode('*115*5#', True)
         'AA58ACA6AA8D1A'
         """
