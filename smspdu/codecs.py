@@ -42,7 +42,7 @@ class GSM:
         r"""
         Returns decoded message from PDU string.
 
-        If with_padding argument is true and the total number of characters to be sent equals to (8n-1) where n=1,2,3,
+        If strip_padding argument is true and the total number of characters to be sent equals to (8n-1) where n=1,2,3,
         etc, then there are 7 spare bits at the end of the message and the last padding character is <CR>, the decode
         function removes this last <CR>.
 
@@ -57,11 +57,11 @@ class GSM:
         >>> GSM.decode('32D0A60C8287E5A0F63B3D07')
         '2 € par mois'
 
-        Decodes without padding
+        Decodes without strip padding
         >>> GSM.decode('AA58ACA6AA8D1A')
         '*115*5#\r'
 
-        Decodes with padding, removes the last <CR>
+        Decodes with strip padding, removes the last <CR>
         >>> GSM.decode('AA58ACA6AA8D1A', True)
         '*115*5#'
         """
