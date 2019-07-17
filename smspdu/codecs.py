@@ -42,9 +42,7 @@ class GSM:
         r"""
         Returns decoded message from PDU string.
 
-        If strip_padding argument is true and the total number of characters to be sent equals to (8n-1) where n=1,2,3,
-        etc, then there are 7 spare bits at the end of the message and the last padding character is <CR>, the decode
-        function removes this last <CR>.
+        When strip_padding argument equals True, checks if the last symbol is a padding character (CR) and removes it.
 
         For more details, read the ETSI GSM 03.38 specification (version 5.6.1) that can be found at:
         https://www.etsi.org/deliver/etsi_i_ets/300900_300999/300900/03_60/ets_300900e03p.pdf
@@ -57,11 +55,13 @@ class GSM:
         >>> GSM.decode('32D0A60C8287E5A0F63B3D07')
         '2 € par mois'
 
-        Decodes without strip padding
+        Decodes without stripping the padding character:
+
         >>> GSM.decode('AA58ACA6AA8D1A')
         '*115*5#\r'
 
-        Decodes with strip padding, removes the last <CR>
+        Decodes the same PDU, and strips the padding character:
+
         >>> GSM.decode('AA58ACA6AA8D1A', True)
         '*115*5#'
         """
@@ -81,23 +81,24 @@ class GSM:
 
         if strip_padding and len(septets) % 8 == 0 and res.endswith('\r'):
             return res[:-1]
-        else:
-            return res
+        return res
 
     @classmethod
     def encode(cls, data: str, with_padding: bool = False) -> str:
         """
         Returns an encoded PDU string.
 
-        If with_padding argument is true and the total number of characters to be sent equals to (8n-1) where n=1,2,3,
-        etc, then there are 7 spare bits at the end of the message. To avoid the situation where the receiving entity
-        confuses 7 binary zero pad bits as the @ character, a <CR> character shall be used for padding in this
-        situation.
-        If <CR> is intended to be the last character and the message (including the wanted <CR>) ends on an
-        octet boundary, then another <CR> must be added together with a padding bit 0.
+        If the total number of characters to be sent equals to 8n + 7 where n ≥ 0, then there are 7 spare bits at the
+        end of the last octet. To avoid the situation where the receiving entity confuses these 7 zero bits as the @
+        character, a padding character (CR) can replace these empty bits.
+
+        If CR is intended to be the last character and the message (including the wanted <CR>) ends on an
+        octet boundary, then another CR can be added together with a padding bit 0.
 
         For more details, read the ETSI GSM 03.38 specification (version 5.6.1) that can be found at:
         https://www.etsi.org/deliver/etsi_i_ets/300900_300999/300900/03_60/ets_300900e03p.pdf
+
+        Set with_paddign to True in order to enable the use of this padding character.
 
         Example:
 
@@ -109,13 +110,15 @@ class GSM:
         >>> GSM.encode("2 € par mois")
         '32D0A60C8287E5A0F63B3D07'
 
-        Encodes without padding
-        >>> GSM.encode('*115*5#')
-        'AA58ACA6AA8D00'
+        Encodes 7 characters without padding:
 
-        Encodes with padding, adds a <CR> at the end
-        >>> GSM.encode('*115*5#', True)
-        'AA58ACA6AA8D1A'
+        >>> GSM.encode('1234567')
+        '31D98C56B3DD00'
+
+        Encodes 7 characters and uses padding:
+
+        >>> GSM.encode('1234567', with_padding=True)
+        '31D98C56B3DD1A'
         """
         chars = list()
         for char in data:
