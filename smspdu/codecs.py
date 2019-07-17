@@ -137,7 +137,7 @@ class GSM:
             chars.append(char_index)
 
         if with_padding:
-            if len(chars) % 8 == 0 and data[-1] == '\r':
+            if len(chars) % 8 == 0 and data[-1:] == '\r':
                 chars.append(cls.ALPHABET.index('\r'))
             if len(chars) % 8 == 7:
                 chars.append(cls.ALPHABET.index('\r'))

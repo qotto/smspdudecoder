@@ -21,6 +21,7 @@ class GSMEncodingTestCase(unittest.TestCase):
 
     def test_empty(self):
         self.assertEqual(GSM.encode(''), GSM.decode(''), '')
+        self.assertEqual(GSM.encode('', with_padding=True), GSM.decode('', strip_padding=True), '')
 
     def test_long(self):
         DATA_DECODED = (
@@ -37,7 +38,6 @@ class GSMEncodingTestCase(unittest.TestCase):
 
     def test_ext_alphabet(self):
         self.assertEqual(GSM.encode('123456€\r', with_padding=True), '31D98C56B36DCA0D')
-
         self.assertEqual(GSM.encode('12345678\r',  with_padding=True), '31D98C56B3DD700D')
 
     def test_double_cr(self):
@@ -66,9 +66,3 @@ class GSMEncodingTestCase(unittest.TestCase):
         self.assertEqual(GSM.decode(GSM.encode('12345^', with_padding=True), strip_padding=False), '12345^\r')
         self.assertEqual(GSM.decode(GSM.encode('123456^', with_padding=True), strip_padding=True), '123456^')
         self.assertEqual(GSM.decode(GSM.encode('123456^', with_padding=True), strip_padding=False), '123456^')
-
-    def test_8n_1_decode(self):
-        self.assertEqual(GSM.decode(GSM.encode('1234567', with_padding=True), strip_padding=True), '1234567')
-
-        self.assertEqual(GSM.decode(GSM.encode('0123456789ABCDE', with_padding=True),
-                                    strip_padding=True), '0123456789ABCDE')
