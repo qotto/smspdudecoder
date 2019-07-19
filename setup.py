@@ -21,5 +21,6 @@ if __name__ == '__main__':
         classifiers=[
             'Intended Audience :: Developers',
             'Programming Language :: Python :: 3.6',
+            'Programming Language :: Python :: 3.7',
         ],
     )
