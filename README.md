@@ -6,7 +6,7 @@ It has some encoding functionality as well.
 
 It is recommended to read [GSM 03.40](https://en.wikipedia.org/wiki/GSM_03.40) to facilitate understanding.
 
-Requires Python 3.6.
+Requires Python 3.6 or 3.7.
 
 ## How to install
 
