@@ -1,5 +1,7 @@
 # SMS-PDU Decoder
 
+[![PyPI version](https://badge.fury.io/py/smspdudecoder.svg)](https://badge.fury.io/py/smspdudecoder)
+
 This library will help you to decode raw SMS data you can get from a GSM modem (generally by using AT commands).
 
 It has some encoding functionality as well.
