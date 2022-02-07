@@ -18,9 +18,10 @@ wheel:
 dist: sdist wheel
 
 sign:
-	sh -c 'read -s -p "Enter GPG passphrase: " pwd && \
-	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/${NAME}-${VERSION}.tar.gz && \
-	gpg --detach-sign --batch --yes --armor --passphrase $$pwd dist/${NAME_NORMALIZED}-${VERSION}-*.whl'
+	pip install -U twine
+	sh -c 'echo "Enter GPG passphrase: " && \
+	gpg --detach-sign --batch --yes --armor dist/${NAME}-${VERSION}.tar.gz && \
+	gpg --detach-sign --batch --yes --armor dist/${NAME_NORMALIZED}-${VERSION}-*.whl'
 	@echo
 
 pypi: dist sign
