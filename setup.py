@@ -9,14 +9,14 @@ if __name__ == '__main__':
     setup(
         name='smspdudecoder',
         version='1.2.2',
-        url='https://github.com/qotto/smspdu',
+        url='https://github.com/qotto/smspdudecoder',
         license='MIT',
         author='Alexandre Syenchuk',
         author_email='sacha@qotto.net',
         description='Python SMS PDU Decoder',
         long_description=long_description,
         long_description_content_type="text/markdown",
-        packages=['smspdu'],
+        packages=['smspdudecoder'],
         include_package_data=True,
         zip_safe=False,
         install_requires=[

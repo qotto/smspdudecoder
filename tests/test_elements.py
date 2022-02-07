@@ -4,8 +4,8 @@
 
 import unittest
 
-from smspdu.elements import Number
-from smspdu.elements import TypeOfAddress
+from smspdudecoder.elements import Number
+from smspdudecoder.elements import TypeOfAddress
 
 class NumberTestCase(unittest.TestCase):
     def test_empty(self):

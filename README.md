@@ -21,7 +21,7 @@ Please take a look at the source code, which comes with documentation and exampl
 For instance, you can use GSM and UCS2 encodings just like that:
 
 ```python
->>> from smspdu.codecs import GSM, UCS2
+>>> from smspdudecoder.codecs import GSM, UCS2
 >>> GSM.decode('C8F71D14969741F977FD07')
 'How are you?'
 >>> UCS2.decode('004C006F00720065006D00200049007000730075006D')
@@ -33,9 +33,9 @@ For instance, you can use GSM and UCS2 encodings just like that:
 First, clone this repository:
 
 ```sh
-git clone git@github.com:Qotto/smspdudecoder.git
+git clone git@github.com:qotto/smspdudecoder.git
 # or use HTTPS if you are unauthenticated:
-# git clone https://github.com/Qotto/smspdudecoder.git
+# git clone https://github.com/qotto/smspdudecoder.git
 cd smspdudecoder
 ```
 

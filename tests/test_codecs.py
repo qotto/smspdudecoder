@@ -4,7 +4,7 @@
 
 import unittest
 
-from smspdu.codecs import GSM
+from smspdudecoder.codecs import GSM
 
 
 class GSMEncodingTestCase(unittest.TestCase):
