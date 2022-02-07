@@ -33,6 +33,10 @@ requirements:
 test:
 	python setup.py test
 
+docker-test:
+	docker build -f test.Dockerfile -t ${NAME}-test .
+	docker run --rm ${NAME}-test tox
+
 clean:
 	python setup.py clean
 	rm -fr build/ dist/ .eggs/ .tox/
