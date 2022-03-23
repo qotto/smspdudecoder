@@ -1,13 +1,13 @@
-# coding: utf-8
-# Copyright (c) Qotto, 2018-2019
+# Copyright (c) Qotto, 2018-2022
 # Open-source software, see LICENSE file for details
 
-from .fields import SMSDeliver
 from io import StringIO
-
 from typing import Any, Dict
 
+from .fields import SMSDeliver
+
 __all__ = ['easy_sms']
+
 
 def easy_sms(data: str) -> Dict[str, Any]:
     sms = SMSDeliver.decode(StringIO(data))

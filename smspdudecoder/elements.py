@@ -1,5 +1,4 @@
-# coding: utf-8
-# Copyright (c) Qotto, 2018-2019
+# Copyright (c) Qotto, 2018-2022
 # Open-source software, see LICENSE file for details
 
 """
@@ -8,17 +7,22 @@ Various elements used in TP-DU, according to GSM 03.40.
 All these elements are encoded in strings and decoded in native Python objects.
 """
 
-import pytz
-
-from bitstring import BitStream
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
 from io import StringIO
+from typing import Dict
 
-from typing import Any, Dict
+import pytz
 
-__all__ = ['Date', 'Number', 'TypeOfAddress']
+from bitstring import BitStream
+
+__all__ = [
+    'Date',
+    'Number',
+    'TypeOfAddress',
+]
+
 
 def swap_nibbles(data: str) -> str:
     """

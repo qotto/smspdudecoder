@@ -1,5 +1,4 @@
-# coding: utf-8
-# Copyright (c) Qotto, 2018-2019
+# Copyright (c) Qotto, 2018-2022
 # Open-source software, see LICENSE file for details
 
 import unittest
@@ -7,9 +6,11 @@ import unittest
 from smspdudecoder.elements import Number
 from smspdudecoder.elements import TypeOfAddress
 
+
 class NumberTestCase(unittest.TestCase):
     def test_empty(self):
         self.assertEqual(Number.encode(''), Number.decode(''), '')
+
 
 class TypeOfAddressTestCase(unittest.TestCase):
     def test_unknown(self):
