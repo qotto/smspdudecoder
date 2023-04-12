@@ -2,7 +2,7 @@
 
 ## 2.0.0 (2022-02-07)
 
-- Package smspdu renamed to `smspdudecoder` for `consistency`.
+- Package smspdu renamed to `smspdudecoder` for consistency.
 - Added tests for Python 3.7, 3.8, 3.9 and 3.10.
 
 ## 1.2.1  (2019-07-22)
