@@ -4,12 +4,15 @@
 from io import StringIO
 from typing import Any, Dict
 
-from .fields import SMSDeliver
+from .fields import SMSDeliver, SMSSubmit
 
-__all__ = ['easy_sms']
+__all__ = [
+    'read_incoming_sms',
+    'read_outgoing_sms',
+]
 
 
-def easy_sms(data: str) -> Dict[str, Any]:
+def read_incoming_sms(data: str) -> Dict[str, Any]:
     sms = SMSDeliver.decode(StringIO(data))
     sender = sms['sender']['number']
     if sms['sender']['toa']['ton'] == 'international':
@@ -32,4 +35,16 @@ def easy_sms(data: str) -> Dict[str, Any]:
         'date': date,
         'content': content,
         'partial': partial,
+    }
+
+
+def read_outgoing_sms(data: str) -> Dict[str, Any]:
+    sms = SMSSubmit.decode(StringIO(data))
+    recipient = sms['recipient']['number']
+    if sms['recipient']['toa']['ton'] == 'international':
+        recipient = '+' + recipient
+    content = sms['user_data']['data']
+    return {
+        'recipient': recipient,
+        'content': content,
     }

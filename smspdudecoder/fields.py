@@ -74,6 +74,13 @@ class SMSC:
         {'length': 7, 'toa': {'ton': 'international', 'npi': 'isdn'}, 'number': '22997976852'}
         """
         length = int(pdu_data.read(2), 16)
+        if not length:
+            return {
+                'length': 0,
+                'toa': None,
+                'number': None,
+            }
+
         toa = TypeOfAddress.decode(pdu_data.read(2))
         encoded_number = pdu_data.read(2*(length-1))
         if toa['ton'] == 'alphanumeric':
@@ -118,6 +125,44 @@ class PDUHeader:
         result['lp'] = io_data.read('bool')
         # More Messages to Send
         result['mms'] = io_data.read('bool')
+        # Message Type Indicator
+        result['mti'] = cls.MTI.get(io_data.read('bits:2').uint)
+        if result['mti'] is None:
+            raise ValueError("Invalid Message Type Indicator")
+        return result
+
+
+class OutgoingPDUHeader:
+    """
+    Describes the outgoing TPDU header of SM-TP
+    """
+    MTI = {
+        0b00: 'deliver',
+        0b01: 'submit',
+        0b10: 'status',
+    }
+    MTI_INV = dict([(v[1], v[0]) for v in MTI.items()])
+
+    @classmethod
+    def decode(cls, pdu_data: StringIO) -> Dict[str, Any]:
+        """
+        Decodes an outgoing PDU header.
+
+        >>> OutgoingPDUHeader.decode(StringIO('11'))
+        {'rp': False, 'udhi': True, 'sri': False, 'lp': False, 'mms': True, 'mti': 'deliver'}
+        """
+        result = dict()
+        io_data = BitStream(hex=pdu_data.read(2))
+        # Reply Path
+        result['rp'] = io_data.read('bool')
+        # User Data Header Indicator
+        result['udhi'] = io_data.read('bool')
+        # Status Report Request
+        result['srr'] = io_data.read('bool')
+        # Validity Period Format
+        result['vpf'] = io_data.read('bits:2').uint
+        # Reject Duplicates
+        result['rd'] = io_data.read('bool')
         # Message Type Indicator
         result['mti'] = cls.MTI.get(io_data.read('bits:2').uint)
         if result['mti'] is None:
@@ -231,5 +276,42 @@ class SMSDeliver:
         result['pid'] = int(pdu_data.read(2), 16)
         result['dcs'] = DCS.decode(pdu_data)
         result['scts'] = Date.decode(pdu_data.read(2*7))
+        result['user_data'] = UserData.decode(pdu_data, result)
+        return result
+
+
+class SMSSubmit:
+    """
+    SMS-SUBMIT TP-DU.
+    """
+    @classmethod
+    def decode(cls, pdu_data: StringIO):
+        """
+        Decodes an SMS-SUBMIT TP-DU.
+        """
+        result = dict()
+        result['smsc'] = SMSC.decode(pdu_data)
+        result['header'] = OutgoingPDUHeader.decode(pdu_data)
+        result['message-ref'] = int(pdu_data.read(2), 16)
+        result['recipient'] = Address.decode(pdu_data)
+        result['pid'] = int(pdu_data.read(2), 16)
+        result['dcs'] = DCS.decode(pdu_data)
+        if result['header']['vpf'] == 0:
+            pass
+        elif result['header']['vpf'] == 2:
+            result['vp'] = int(pdu_data.read(2), 16)
+            if result['vp'] <= 143:
+                result['validity-minutes'] = result['vp'] * 5
+            elif result['vp'] <= 167:
+                result['validity-hours'] = 12 + (result['vp'] - 143) // 2
+            elif result['vp'] <= 196:
+                result['validity-days'] = result['vp'] - 166
+            else:
+                result['validity-weeks'] = result['vp'] - 192
+        elif result['header']['vpf'] == 3:
+            result['vp'] = Date.decode(pdu_data.read(2*7))
+        else:
+            pdu_data.read(2*7) # skips the enhanced format
+
         result['user_data'] = UserData.decode(pdu_data, result)
         return result
