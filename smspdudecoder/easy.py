@@ -1,4 +1,4 @@
-# Copyright (c) Qotto, 2018-2022
+# Copyright (c) Qotto, 2018-2023
 # Open-source software, see LICENSE file for details
 
 from io import StringIO

@@ -1,5 +1,9 @@
 # Release notes
 
+## 2.1.0 (2023-04-12)
+
+- Added basic support for SMS-SUBMIT messages
+
 ## 2.0.0 (2022-02-07)
 
 - Package smspdu renamed to `smspdudecoder` for consistency.
