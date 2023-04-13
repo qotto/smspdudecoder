@@ -149,7 +149,7 @@ class OutgoingPDUHeader:
         Decodes an outgoing PDU header.
 
         >>> OutgoingPDUHeader.decode(StringIO('11'))
-        {'rp': False, 'udhi': True, 'sri': False, 'lp': False, 'mms': True, 'mti': 'deliver'}
+        {'rp': False, 'udhi': False, 'srr': False, 'vpf': 2, 'rd': False, 'mti': 'submit'}
         """
         result = dict()
         io_data = BitStream(hex=pdu_data.read(2))
