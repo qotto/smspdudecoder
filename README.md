@@ -71,6 +71,24 @@ If you execute this example, the `sms_data` variable will contain a dictionary w
 }
 ```
 
+If you don't need all the technical details, you can use the `easy` module to get a simple representation of the SMS:
+
+```python
+from smspdudecoder.easy import read_incoming_sms
+sms = read_incoming_sms('07916407058099F9040B916407950303F100008921222140140004D4E2940A')
+```
+
+Which would produce the following result:
+
+```python
+{
+  'sender': '+46705930301',
+  'content': 'TEST',
+  'date': datetime.datetime(2098, 12, 22, 12, 4, 41, tzinfo=datetime.timezone.utc),
+  'partial': False
+}
+```
+
 ## How to test and contribute
 
 First, clone this repository:
