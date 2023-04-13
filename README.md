@@ -79,7 +79,7 @@ from smspdudecoder.easy import read_incoming_sms
 sms = read_incoming_sms('07916407058099F9040B916407950303F100008921222140140004D4E2940A')
 ```
 
-Which would produce the following result:
+Which will produce the following result:
 
 ```python
 {
