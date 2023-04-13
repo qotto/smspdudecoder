@@ -75,6 +75,7 @@ If you don't need all the technical details, you can use the `easy` module to ge
 
 ```python
 from smspdudecoder.easy import read_incoming_sms
+
 sms = read_incoming_sms('07916407058099F9040B916407950303F100008921222140140004D4E2940A')
 ```
 
